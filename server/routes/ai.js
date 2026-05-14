@@ -3,6 +3,15 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 
+// 503 helper
+const requireAIKey = (req, res, next) => {
+  const k = process.env.OPENROUTER_API_KEY;
+  if (!k || k === 'your_openrouter_api_key_here' || k === 'your_openrouter_key_here') {
+    return res.status(503).json({ message: 'AI not configured', error: 'AI not configured. Set OPENROUTER_API_KEY in server .env.' });
+  }
+  next();
+};
+
 const callOpenRouter = async (prompt, systemPrompt) => {
   const response = await axios.post(
     'https://openrouter.ai/api/v1/chat/completions',
@@ -278,6 +287,77 @@ router.post('/promotion-analysis', auth, async (req, res) => {
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale promotions strategist. Format with markdown headers and bullet points.');
     res.json({ analysis });
   } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+});
+
+// Customer Churn Prediction
+// POST /api/ai/customer-churn-prediction
+// Body: { customer: { name, accountAge, lastOrderDate, ordersLast90Days, lifetimeValue, supportTickets, ... } }
+router.post('/customer-churn-prediction', auth, requireAIKey, async (req, res) => {
+  try {
+    const { customer = {} } = req.body || {};
+    const prompt = `Predict churn risk for this wholesale customer and recommend retention actions.
+Customer: ${customer.name || 'unspecified'}
+Account age (months): ${customer.accountAge ?? 'unknown'}
+Last order date: ${customer.lastOrderDate || 'unknown'}
+Orders in last 90 days: ${customer.ordersLast90Days ?? 'unknown'}
+Lifetime value: $${customer.lifetimeValue ?? 'unknown'}
+Open support tickets: ${customer.supportTickets ?? 'unknown'}
+Recent payment behavior: ${customer.paymentBehavior || 'unknown'}
+Territory: ${customer.territory || 'unknown'}
+Sales rep: ${customer.salesRep || 'unknown'}
+
+Provide: 1) Churn risk score (low/medium/high/critical) and 0-100 probability estimate 2) Top 3 churn signals 3) Retention plays ranked by expected impact 4) Win-back offer suggestions 5) Suggested follow-up timeline.`;
+    const analysis = await callOpenRouter(prompt, 'You are an expert wholesale customer success analyst predicting churn risk. Provide actionable, data-driven recommendations. Format your response with clear sections using markdown headers and bullet points.');
+    res.json({ analysis });
+  } catch (err) {
+    console.error('AI Error:', err.response?.data || err.message);
+    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+  }
+});
+
+// Contract Renewal Recommendation
+// POST /api/ai/contract-renewal-recommendation
+// Body: { contract: { customerName, currentTerms, expirationDate, annualSpend, marginTrend, paymentBehavior, competitorActivity, ... } }
+router.post('/contract-renewal-recommendation', auth, requireAIKey, async (req, res) => {
+  try {
+    const { contract = {} } = req.body || {};
+    const prompt = `Recommend contract renewal strategy for this wholesale customer agreement.
+Customer: ${contract.customerName || 'unspecified'}
+Current terms summary: ${contract.currentTerms || 'unknown'}
+Expiration date: ${contract.expirationDate || 'unknown'}
+Annual spend: $${contract.annualSpend ?? 'unknown'}
+Margin trend (last 12 months): ${contract.marginTrend || 'unknown'}
+Payment behavior: ${contract.paymentBehavior || 'unknown'}
+Competitor activity: ${contract.competitorActivity || 'unknown'}
+Customer satisfaction signal: ${contract.satisfactionSignal || 'unknown'}
+
+Provide: 1) Renewal recommendation (renew_as_is | negotiate | restructure | non_renew) with rationale 2) Suggested updated pricing tiers / volume rebates 3) Margin floor recommendation 4) Key clauses to add or revise 5) Negotiation talking points 6) Risk if not renewed.`;
+    const analysis = await callOpenRouter(prompt, 'You are an expert wholesale contracts strategist. Provide actionable renewal recommendations balancing margin and retention. Format your response with clear sections using markdown headers and bullet points.');
+    res.json({ analysis });
+  } catch (err) {
+    console.error('AI Error:', err.response?.data || err.message);
+    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+  }
+});
+
+// Supplier Diversification Analysis
+// POST /api/ai/supplier-diversification
+// Body: { supplierMix: [{ supplierName, category, share, leadTime, defectRate, onTimeRate }], constraints?, goals? }
+router.post('/supplier-diversification', auth, requireAIKey, async (req, res) => {
+  try {
+    const { supplierMix = [], constraints = '', goals = '' } = req.body || {};
+    const prompt = `Analyze this supplier portfolio and recommend diversification moves to reduce concentration and supply-chain risk.
+Supplier mix: ${JSON.stringify(supplierMix).slice(0, 6000)}
+Constraints: ${constraints || 'none specified'}
+Goals: ${goals || 'reduce single-source risk and improve resilience'}
+
+Provide: 1) Concentration risk per category 2) Top 3 single-points-of-failure 3) Suggested alternate supplier profiles (region, capacity tier, certifications) 4) Recommended target share per supplier 5) Phased migration plan with milestones 6) Estimated impact on lead time, cost, and quality.`;
+    const analysis = await callOpenRouter(prompt, 'You are an expert wholesale supply chain strategist focused on supplier diversification and resilience. Format your response with clear sections using markdown headers and bullet points.');
+    res.json({ analysis });
+  } catch (err) {
+    console.error('AI Error:', err.response?.data || err.message);
+    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+  }
 });
 
 module.exports = router;

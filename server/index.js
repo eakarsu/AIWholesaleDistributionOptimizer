@@ -36,6 +36,8 @@ app.use('/api/settings', require('./routes/settings'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/import', require('./routes/import'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/integrations', require('./routes/integrations'));
+app.use('/api/custom', require('./routes/customFeatures'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -47,9 +49,13 @@ if (process.env.NODE_ENV === 'production') {
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database synced');
+// // === Batch 09 Gaps & Frontend Mounts ===
+app.use('/api/gap-nonai-aiwholesaledistributionoptimizer', require('./routes/batch09GapNonai')); // // === Batch 09 Gaps & Frontend Mounts ===
+
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }).catch(err => {
   console.error('Database sync failed:', err);
 });
+
