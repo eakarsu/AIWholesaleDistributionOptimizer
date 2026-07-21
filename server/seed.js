@@ -4,15 +4,21 @@ const { sequelize, User, Territory, Order, CrossSell, Route, Inventory, Customer
 
 const seed = async () => {
   try {
+    if (process.env.RESET_DATABASE !== '1' || process.env.SEED_DEMO_DATA !== '1') {
+      throw new Error('Refusing demo seed without RESET_DATABASE=1 and SEED_DEMO_DATA=1');
+    }
     await sequelize.sync({ force: true });
     console.log('Database synced (tables recreated)');
 
     // Seed Users
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    const adminEmail = process.env.SEED_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.SEED_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    if (!adminEmail || !adminPassword) throw new Error('SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD are required');
+    const hashedPassword = await bcrypt.hash(adminPassword, 12);
     await User.bulkCreate([
-      { name: 'Admin User', email: 'admin@wholesale.com', password: hashedPassword, role: 'admin' },
-      { name: 'Sales Manager', email: 'manager@wholesale.com', password: hashedPassword, role: 'manager' },
-      { name: 'Sales Rep', email: 'rep@wholesale.com', password: hashedPassword, role: 'user' }
+      { name: process.env.BOOTSTRAP_ADMIN_NAME || 'Admin User', email: adminEmail, password: hashedPassword, role: 'admin' },
+      { name: 'Sales Manager', email: 'manager@wholesale.invalid', password: hashedPassword, role: 'manager' },
+      { name: 'Sales Rep', email: 'rep@wholesale.invalid', password: hashedPassword, role: 'user' }
     ]);
     console.log('Users seeded');
 
@@ -399,10 +405,7 @@ const seed = async () => {
     console.log('Settings seeded (15 items)');
 
     console.log('\n✅ All seed data loaded successfully!');
-    console.log('Login credentials:');
-    console.log('  Admin: admin@wholesale.com / password123');
-    console.log('  Manager: manager@wholesale.com / password123');
-    console.log('  User: rep@wholesale.com / password123');
+    console.log(`Admin identity provisioned for ${adminEmail}`);
 
     process.exit(0);
   } catch (err) {

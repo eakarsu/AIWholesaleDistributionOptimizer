@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'wholesale-optimizer-secret-key-2024');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (err) {

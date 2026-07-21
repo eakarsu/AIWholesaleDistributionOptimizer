@@ -7,8 +7,16 @@ const { sequelize } = require('./models');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must contain at least 32 characters');
+}
+
+app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
 app.use(express.json());
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'wholesale-distribution-optimizer' });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -41,9 +49,9 @@ app.use('/api/custom', require('./routes/customFeatures'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.use(express.static(path.join(__dirname, '../web/build')));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../web/build/index.html'));
   });
 }
 
@@ -58,4 +66,3 @@ app.use('/api/gap-nonai-aiwholesaledistributionoptimizer', require('./routes/bat
 }).catch(err => {
   console.error('Database sync failed:', err);
 });
-
