@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
+const { AIResult } = require('../models');
 
 // 503 helper
 const requireAIKey = (req, res, next) => {
@@ -13,10 +14,16 @@ const requireAIKey = (req, res, next) => {
 };
 
 const callOpenRouter = async (prompt, systemPrompt) => {
+  const model = process.env.OPENROUTER_MODEL?.trim();
+  const baseUrl = process.env.OPENROUTER_BASE_URL?.trim().replace(/\/$/, '');
+  if (!model) throw new Error('OPENROUTER_MODEL is required');
+  if (baseUrl !== 'https://openrouter.ai/api/v1') {
+    throw new Error('OPENROUTER_BASE_URL must be https://openrouter.ai/api/v1');
+  }
   const response = await axios.post(
-    'https://openrouter.ai/api/v1/chat/completions',
+    `${baseUrl}/chat/completions`,
     {
-      model: process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5',
+      model,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: prompt }
@@ -33,7 +40,15 @@ const callOpenRouter = async (prompt, systemPrompt) => {
       }
     }
   );
-  return response.data.choices[0].message.content;
+  const content = response.data?.choices?.[0]?.message?.content;
+  if (typeof content !== 'string' || !content.trim()) {
+    throw new Error('OpenRouter returned an empty response');
+  }
+  return content;
+};
+
+const persistAIResult = async (userId, endpoint, inputData, analysis) => {
+  await AIResult.create({ userId, endpoint, inputData, result: { analysis } });
 };
 
 // Territory Analysis AI
@@ -52,6 +67,7 @@ router.post('/territory-analysis', auth, async (req, res) => {
     Provide: 1) Market opportunity assessment 2) Growth strategy recommendations 3) Resource allocation suggestions 4) Competitive positioning advice 5) Risk factors to consider`;
 
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale distribution territory planning analyst. Provide actionable, data-driven insights for territory optimization. Format your response with clear sections using markdown headers and bullet points.');
+    await persistAIResult(req.user.id, '/api/ai/territory-analysis', { territory }, analysis);
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);

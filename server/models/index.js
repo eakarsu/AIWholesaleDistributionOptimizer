@@ -346,4 +346,12 @@ const Setting = sequelize.define('Setting', {
   description: { type: DataTypes.STRING }
 });
 
-module.exports = { sequelize, User, Territory, Order, CrossSell, Route, Inventory, Customer, Forecast, Supplier, Pricing, Return, SalesRep, DemandPlan, Delivery, Warehouse, Promotion, AuditLog, Notification, Invoice, Setting };
+const AIResult = sequelize.define('AIResult', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false },
+  endpoint: { type: DataTypes.STRING, allowNull: false },
+  inputData: { type: DataTypes.JSONB, allowNull: false, defaultValue: {} },
+  result: { type: DataTypes.JSONB, allowNull: false }
+}, { tableName: 'ai_results', underscored: true });
+
+module.exports = { sequelize, User, Territory, Order, CrossSell, Route, Inventory, Customer, Forecast, Supplier, Pricing, Return, SalesRep, DemandPlan, Delivery, Warehouse, Promotion, AuditLog, Notification, Invoice, Setting, AIResult };
