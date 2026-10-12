@@ -4,6 +4,16 @@ const axios = require('axios');
 const auth = require('../middleware/auth');
 const { AIResult } = require('../models');
 
+const sendAIError = (res, err) => {
+  if (err.isAxiosError || /^(?:OPENROUTER_|OpenRouter returned)/.test(err.message || '')) {
+    return res.status(503).json({
+      message: 'AI provider unavailable',
+      error: 'The AI provider is unavailable or not configured. Please try again after service is restored.'
+    });
+  }
+  return res.status(500).json({ message: 'AI analysis failed', error: err.message });
+};
+
 // 503 helper
 const requireAIKey = (req, res, next) => {
   const k = process.env.OPENROUTER_API_KEY;
@@ -51,6 +61,19 @@ const persistAIResult = async (userId, endpoint, inputData, analysis) => {
   await AIResult.create({ userId, endpoint, inputData, result: { analysis } });
 };
 
+router.get('/history', auth, async (req, res) => {
+  try {
+    const results = await AIResult.findAll({
+      where: { userId: req.user.id },
+      order: [['createdAt', 'DESC']],
+      limit: 20
+    });
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ message: 'Saved AI reports are unavailable' });
+  }
+});
+
 // Territory Analysis AI
 router.post('/territory-analysis', auth, async (req, res) => {
   try {
@@ -71,7 +94,7 @@ router.post('/territory-analysis', auth, async (req, res) => {
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -90,7 +113,7 @@ router.post('/order-analysis', auth, async (req, res) => {
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -110,7 +133,7 @@ router.post('/crosssell-analysis', auth, async (req, res) => {
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -132,7 +155,7 @@ router.post('/route-analysis', auth, async (req, res) => {
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -158,7 +181,7 @@ router.post('/inventory-analysis', auth, async (req, res) => {
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -173,7 +196,7 @@ router.post('/customer-analysis', auth, async (req, res) => {
     Provide: 1) Customer health score 2) Retention strategies 3) Growth opportunities 4) Risk assessment 5) Account development plan`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale CRM analyst. Provide actionable customer insights. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Forecast Analysis AI
@@ -187,7 +210,7 @@ router.post('/forecast-analysis', auth, async (req, res) => {
     Provide: 1) Forecast accuracy assessment 2) Trend analysis 3) Risk factors 4) Adjusted forecast recommendation 5) Action items`;
     const analysis = await callOpenRouter(prompt, 'You are an expert sales forecasting analyst for wholesale distribution. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Supplier Analysis AI
@@ -201,7 +224,7 @@ router.post('/supplier-analysis', auth, async (req, res) => {
     Provide: 1) Performance scorecard 2) Risk assessment 3) Negotiation recommendations 4) Alternative supplier suggestions 5) Improvement areas`;
     const analysis = await callOpenRouter(prompt, 'You are an expert supply chain analyst for wholesale distribution. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Pricing Analysis AI
@@ -216,7 +239,7 @@ router.post('/pricing-analysis', auth, async (req, res) => {
     Provide: 1) Optimal price recommendation 2) Competitive positioning 3) Margin optimization 4) Dynamic pricing suggestions 5) Revenue impact forecast`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale pricing strategist. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Returns Analysis AI
@@ -230,7 +253,7 @@ router.post('/returns-analysis', auth, async (req, res) => {
     Provide: 1) Root cause analysis 2) Resolution recommendation 3) Prevention strategies 4) Customer retention approach 5) Process improvement suggestions`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale returns and claims analyst. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Sales Rep Analysis AI
@@ -245,7 +268,7 @@ router.post('/salesrep-analysis', auth, async (req, res) => {
     Provide: 1) Performance assessment 2) Strengths and areas for improvement 3) Coaching recommendations 4) Territory optimization 5) Goal-setting suggestions`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale sales performance coach. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Demand Planning AI
@@ -260,7 +283,7 @@ router.post('/demand-analysis', auth, async (req, res) => {
     Provide: 1) Demand forecast validation 2) Seasonal adjustment recommendations 3) Stock level optimization 4) Risk mitigation 5) Supply chain coordination tips`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale demand planning analyst. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Delivery Analysis AI
@@ -274,7 +297,7 @@ router.post('/delivery-analysis', auth, async (req, res) => {
     Provide: 1) Delivery optimization suggestions 2) Cost reduction opportunities 3) Carrier performance assessment 4) Timeline improvements 5) Customer communication recommendations`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale delivery logistics analyst. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Warehouse Analysis AI
@@ -288,7 +311,7 @@ router.post('/warehouse-analysis', auth, async (req, res) => {
     Provide: 1) Capacity optimization 2) Operational efficiency improvements 3) Cost reduction strategies 4) Layout recommendations 5) Technology upgrade suggestions`;
     const analysis = await callOpenRouter(prompt, 'You are an expert warehouse operations analyst. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Promotion Analysis AI
@@ -302,7 +325,7 @@ router.post('/promotion-analysis', auth, async (req, res) => {
     Provide: 1) Campaign effectiveness analysis 2) ROI assessment 3) Optimization recommendations 4) Target audience refinement 5) Follow-up campaign suggestions`;
     const analysis = await callOpenRouter(prompt, 'You are an expert wholesale promotions strategist. Format with markdown headers and bullet points.');
     res.json({ analysis });
-  } catch (err) { res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message }); }
+  } catch (err) { sendAIError(res, err); }
 });
 
 // Customer Churn Prediction
@@ -327,7 +350,7 @@ Provide: 1) Churn risk score (low/medium/high/critical) and 0-100 probability es
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -352,7 +375,7 @@ Provide: 1) Renewal recommendation (renew_as_is | negotiate | restructure | non_
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 
@@ -372,7 +395,7 @@ Provide: 1) Concentration risk per category 2) Top 3 single-points-of-failure 3)
     res.json({ analysis });
   } catch (err) {
     console.error('AI Error:', err.response?.data || err.message);
-    res.status(500).json({ message: 'AI analysis failed', error: err.response?.data?.error?.message || err.message });
+    sendAIError(res, err);
   }
 });
 

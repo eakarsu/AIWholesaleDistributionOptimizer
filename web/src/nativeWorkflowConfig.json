@@ -1,0 +1,1014 @@
+{
+  "title": "Wholesale Distribution Optimizer",
+  "features": [
+    {
+      "id": "ai-territory-analysis",
+      "endpoint": "/api/ai/territory-analysis",
+      "title": "Territory analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "territory",
+          "type": "json",
+          "required": false,
+          "label": "Territory",
+          "presets": [
+            {
+              "name": "North Metro",
+              "region": "Northeast",
+              "state": "NY",
+              "customerCount": 48,
+              "annualRevenue": 4250000,
+              "growthRate": 8.2,
+              "marketPotential": "High"
+            },
+            {
+              "name": "Coastal South",
+              "region": "Southeast",
+              "state": "GA",
+              "customerCount": 31,
+              "annualRevenue": 2860000,
+              "growthRate": 4.5,
+              "marketPotential": "Medium"
+            },
+            {
+              "name": "Mountain West",
+              "region": "West",
+              "state": "CO",
+              "customerCount": 22,
+              "annualRevenue": 1720000,
+              "growthRate": -1.8,
+              "marketPotential": "High"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 55
+      }
+    },
+    {
+      "id": "ai-order-analysis",
+      "endpoint": "/api/ai/order-analysis",
+      "title": "Order analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "orders",
+          "type": "json",
+          "required": false,
+          "label": "Orders",
+          "presets": [
+            [
+              {
+                "orderNumber": "EXAMPLE-101",
+                "customerName": "Harbor Market",
+                "totalAmount": 12500,
+                "orderDate": "2026-09-18",
+                "status": "Delivered"
+              },
+              {
+                "orderNumber": "EXAMPLE-102",
+                "customerName": "Harbor Market",
+                "totalAmount": 9800,
+                "orderDate": "2026-09-25",
+                "status": "Delivered"
+              }
+            ],
+            [
+              {
+                "orderNumber": "EXAMPLE-201",
+                "customerName": "Pine Foods",
+                "totalAmount": 18400,
+                "orderDate": "2026-08-12",
+                "status": "Delivered"
+              },
+              {
+                "orderNumber": "EXAMPLE-202",
+                "customerName": "Pine Foods",
+                "totalAmount": 7200,
+                "orderDate": "2026-09-17",
+                "status": "Delayed"
+              }
+            ],
+            [
+              {
+                "orderNumber": "EXAMPLE-301",
+                "customerName": "Metro Grocers",
+                "totalAmount": 5400,
+                "orderDate": "2026-07-04",
+                "status": "Returned"
+              },
+              {
+                "orderNumber": "EXAMPLE-302",
+                "customerName": "Metro Grocers",
+                "totalAmount": 10800,
+                "orderDate": "2026-09-30",
+                "status": "Delivered"
+              }
+            ]
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 79
+      }
+    },
+    {
+      "id": "ai-crosssell-analysis",
+      "endpoint": "/api/ai/crosssell-analysis",
+      "title": "Crosssell analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "customer",
+          "type": "json",
+          "required": false,
+          "label": "Customer",
+          "presets": [
+            {
+              "customerName": "Harbor Market",
+              "currentProducts": "Dry goods and canned vegetables",
+              "territory": "North Metro",
+              "lastPurchaseDate": "2026-09-25"
+            },
+            {
+              "customerName": "Pine Foods",
+              "currentProducts": "Cold beverages and snacks",
+              "territory": "Coastal South",
+              "lastPurchaseDate": "2026-09-17"
+            },
+            {
+              "customerName": "Metro Grocers",
+              "currentProducts": "Cleaning supplies",
+              "territory": "Mountain West",
+              "lastPurchaseDate": "2026-09-30"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 98
+      }
+    },
+    {
+      "id": "ai-route-analysis",
+      "endpoint": "/api/ai/route-analysis",
+      "title": "Route analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "route",
+          "type": "json",
+          "required": false,
+          "label": "Route",
+          "presets": [
+            {
+              "routeName": "North Metro AM",
+              "driverName": "Assigned driver",
+              "territory": "North Metro",
+              "stops": "8 retail deliveries across 42 miles",
+              "totalDistance": 42,
+              "vehicleType": "Box truck"
+            },
+            {
+              "routeName": "Coastal South PM",
+              "driverName": "Assigned driver",
+              "territory": "Coastal South",
+              "stops": "11 deliveries across 67 miles",
+              "totalDistance": 67,
+              "vehicleType": "Refrigerated truck"
+            },
+            {
+              "routeName": "Mountain West weekly",
+              "driverName": "Assigned driver",
+              "territory": "Mountain West",
+              "stops": "5 deliveries across 118 miles",
+              "totalDistance": 118,
+              "vehicleType": "Box truck"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 118
+      }
+    },
+    {
+      "id": "ai-inventory-analysis",
+      "endpoint": "/api/ai/inventory-analysis",
+      "title": "Inventory analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "inventory",
+          "type": "json",
+          "required": false,
+          "label": "Inventory",
+          "presets": [
+            {
+              "productName": "Canned tomatoes 24-pack",
+              "sku": "EXAMPLE-TOM-24",
+              "category": "Dry goods",
+              "region": "Northeast",
+              "warehouse": "North distribution center",
+              "currentStock": 180,
+              "minStock": 120,
+              "maxStock": 500,
+              "reorderPoint": 160,
+              "turnoverRate": 8.4
+            },
+            {
+              "productName": "Sparkling water 12-pack",
+              "sku": "EXAMPLE-WAT-12",
+              "category": "Beverages",
+              "region": "Southeast",
+              "warehouse": "South distribution center",
+              "currentStock": 75,
+              "minStock": 100,
+              "maxStock": 400,
+              "reorderPoint": 140,
+              "turnoverRate": 12.1
+            },
+            {
+              "productName": "Frozen vegetables case",
+              "sku": "EXAMPLE-VEG-01",
+              "category": "Frozen foods",
+              "region": "West",
+              "warehouse": "West cold storage",
+              "currentStock": 320,
+              "minStock": 150,
+              "maxStock": 600,
+              "reorderPoint": 200,
+              "turnoverRate": 5.6
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 140
+      }
+    },
+    {
+      "id": "ai-customer-analysis",
+      "endpoint": "/api/ai/customer-analysis",
+      "title": "Customer analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "customer",
+          "type": "json",
+          "required": false,
+          "label": "Customer",
+          "presets": [
+            {
+              "companyName": "Harbor Market",
+              "contactName": "Purchasing manager",
+              "segment": "Independent grocery",
+              "lifetimeValue": 285000,
+              "totalOrders": 42,
+              "avgOrderValue": 6786,
+              "territory": "North Metro",
+              "paymentTerms": "Net 30",
+              "creditLimit": 50000
+            },
+            {
+              "companyName": "Pine Foods",
+              "contactName": "Operations manager",
+              "segment": "Regional grocery",
+              "lifetimeValue": 610000,
+              "totalOrders": 88,
+              "avgOrderValue": 6932,
+              "territory": "Coastal South",
+              "paymentTerms": "Net 45",
+              "creditLimit": 75000
+            },
+            {
+              "companyName": "Metro Grocers",
+              "contactName": "Category buyer",
+              "segment": "Convenience chain",
+              "lifetimeValue": 190000,
+              "totalOrders": 31,
+              "avgOrderValue": 6129,
+              "territory": "Mountain West",
+              "paymentTerms": "Net 30",
+              "creditLimit": 40000
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 166
+      }
+    },
+    {
+      "id": "ai-forecast-analysis",
+      "endpoint": "/api/ai/forecast-analysis",
+      "title": "Forecast analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "forecast",
+          "type": "json",
+          "required": false,
+          "label": "Forecast",
+          "presets": [
+            {
+              "territory": "North Metro",
+              "product": "Canned tomatoes",
+              "period": "2026 Q4",
+              "forecastedRevenue": 425000,
+              "actualRevenue": 392000,
+              "variance": -7.8,
+              "confidence": 82,
+              "growthRate": 8.2,
+              "method": "Seasonal trend"
+            },
+            {
+              "territory": "Coastal South",
+              "product": "Sparkling water",
+              "period": "2026 Q4",
+              "forecastedRevenue": 310000,
+              "actualRevenue": 336000,
+              "variance": 8.4,
+              "confidence": 76,
+              "growthRate": 12.1,
+              "method": "Moving average"
+            },
+            {
+              "territory": "Mountain West",
+              "product": "Frozen vegetables",
+              "period": "2026 Q4",
+              "forecastedRevenue": 215000,
+              "actualRevenue": 198000,
+              "variance": -7.9,
+              "confidence": 68,
+              "growthRate": -1.8,
+              "method": "Sales pipeline"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 180
+      }
+    },
+    {
+      "id": "ai-supplier-analysis",
+      "endpoint": "/api/ai/supplier-analysis",
+      "title": "Supplier analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "supplier",
+          "type": "json",
+          "required": false,
+          "label": "Supplier",
+          "presets": [
+            {
+              "companyName": "Regional Foods Co.",
+              "category": "Dry goods",
+              "leadTimeDays": 7,
+              "reliabilityScore": 94,
+              "onTimeDeliveryRate": 92,
+              "qualityRating": 4.5,
+              "totalOrders": 86,
+              "paymentTerms": "Net 30"
+            },
+            {
+              "companyName": "Coastal Beverage Supply",
+              "category": "Beverages",
+              "leadTimeDays": 12,
+              "reliabilityScore": 83,
+              "onTimeDeliveryRate": 79,
+              "qualityRating": 4.2,
+              "totalOrders": 54,
+              "paymentTerms": "Net 45"
+            },
+            {
+              "companyName": "Mountain Cold Chain",
+              "category": "Frozen foods",
+              "leadTimeDays": 18,
+              "reliabilityScore": 72,
+              "onTimeDeliveryRate": 68,
+              "qualityRating": 3.8,
+              "totalOrders": 32,
+              "paymentTerms": "Net 30"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 194
+      }
+    },
+    {
+      "id": "ai-pricing-analysis",
+      "endpoint": "/api/ai/pricing-analysis",
+      "title": "Pricing analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "pricing",
+          "type": "json",
+          "required": false,
+          "label": "Pricing",
+          "presets": [
+            {
+              "productName": "Canned tomatoes 24-pack",
+              "category": "Dry goods",
+              "baseCost": 18,
+              "currentPrice": 26,
+              "margin": 30.8,
+              "competitorPrice": 27,
+              "demandLevel": "Stable",
+              "priceElasticity": -1.1,
+              "strategy": "Protect margin"
+            },
+            {
+              "productName": "Sparkling water 12-pack",
+              "category": "Beverages",
+              "baseCost": 8.5,
+              "currentPrice": 12.5,
+              "margin": 32,
+              "competitorPrice": 11.9,
+              "demandLevel": "Growing",
+              "priceElasticity": -1.6,
+              "strategy": "Competitive growth"
+            },
+            {
+              "productName": "Frozen vegetables case",
+              "category": "Frozen foods",
+              "baseCost": 24,
+              "currentPrice": 33,
+              "margin": 27.3,
+              "competitorPrice": 35,
+              "demandLevel": "Seasonal",
+              "priceElasticity": -0.8,
+              "strategy": "Seasonal adjustment"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 208
+      }
+    },
+    {
+      "id": "ai-returns-analysis",
+      "endpoint": "/api/ai/returns-analysis",
+      "title": "Returns analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "returnItem",
+          "type": "json",
+          "required": false,
+          "label": "Return Item",
+          "presets": [
+            {
+              "returnNumber": "EXAMPLE-R101",
+              "orderNumber": "EXAMPLE-O101",
+              "customerName": "Harbor Market",
+              "product": "Canned tomatoes 24-pack",
+              "quantity": 4,
+              "reason": "Damaged packaging",
+              "type": "Credit",
+              "refundAmount": 104,
+              "status": "Pending review"
+            },
+            {
+              "returnNumber": "EXAMPLE-R201",
+              "orderNumber": "EXAMPLE-O201",
+              "customerName": "Pine Foods",
+              "product": "Sparkling water 12-pack",
+              "quantity": 12,
+              "reason": "Short shelf life",
+              "type": "Replacement",
+              "refundAmount": 150,
+              "status": "Under review"
+            },
+            {
+              "returnNumber": "EXAMPLE-R301",
+              "orderNumber": "EXAMPLE-O301",
+              "customerName": "Metro Grocers",
+              "product": "Frozen vegetables case",
+              "quantity": 3,
+              "reason": "Temperature excursion",
+              "type": "Refund",
+              "refundAmount": 99,
+              "status": "Escalated"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 223
+      }
+    },
+    {
+      "id": "ai-salesrep-analysis",
+      "endpoint": "/api/ai/salesrep-analysis",
+      "title": "Salesrep analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "rep",
+          "type": "json",
+          "required": false,
+          "label": "Rep",
+          "presets": [
+            {
+              "name": "North territory representative",
+              "territory": "North Metro",
+              "region": "Northeast",
+              "quota": 1200000,
+              "actualSales": 1275000,
+              "attainment": 106.3,
+              "totalDeals": 38,
+              "avgDealSize": 33553,
+              "winRate": 42,
+              "customerCount": 48,
+              "rank": "Top quartile"
+            },
+            {
+              "name": "South territory representative",
+              "territory": "Coastal South",
+              "region": "Southeast",
+              "quota": 1050000,
+              "actualSales": 910000,
+              "attainment": 86.7,
+              "totalDeals": 29,
+              "avgDealSize": 31379,
+              "winRate": 35,
+              "customerCount": 31,
+              "rank": "Middle quartile"
+            },
+            {
+              "name": "West territory representative",
+              "territory": "Mountain West",
+              "region": "West",
+              "quota": 850000,
+              "actualSales": 690000,
+              "attainment": 81.2,
+              "totalDeals": 21,
+              "avgDealSize": 32857,
+              "winRate": 29,
+              "customerCount": 22,
+              "rank": "Lower quartile"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 237
+      }
+    },
+    {
+      "id": "ai-demand-analysis",
+      "endpoint": "/api/ai/demand-analysis",
+      "title": "Demand analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "plan",
+          "type": "json",
+          "required": false,
+          "label": "Plan",
+          "presets": [
+            {
+              "productName": "Canned tomatoes 24-pack",
+              "category": "Dry goods",
+              "region": "Northeast",
+              "currentDemand": 420,
+              "forecastedDemand": 465,
+              "seasonalFactor": 1.1,
+              "trendDirection": "Growing",
+              "confidence": 82,
+              "period": "2026 Q4",
+              "recommendedStock": 510
+            },
+            {
+              "productName": "Sparkling water 12-pack",
+              "category": "Beverages",
+              "region": "Southeast",
+              "currentDemand": 680,
+              "forecastedDemand": 790,
+              "seasonalFactor": 1.16,
+              "trendDirection": "Growing",
+              "confidence": 76,
+              "period": "2026 Q4",
+              "recommendedStock": 850
+            },
+            {
+              "productName": "Frozen vegetables case",
+              "category": "Frozen foods",
+              "region": "West",
+              "currentDemand": 310,
+              "forecastedDemand": 285,
+              "seasonalFactor": 0.92,
+              "trendDirection": "Declining",
+              "confidence": 68,
+              "period": "2026 Q4",
+              "recommendedStock": 330
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 252
+      }
+    },
+    {
+      "id": "ai-delivery-analysis",
+      "endpoint": "/api/ai/delivery-analysis",
+      "title": "Delivery analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "delivery",
+          "type": "json",
+          "required": false,
+          "label": "Delivery",
+          "presets": [
+            {
+              "trackingNumber": "EXAMPLE-D101",
+              "customerName": "Harbor Market",
+              "origin": "North distribution center",
+              "destination": "North Metro",
+              "carrier": "Company fleet",
+              "weight": "1,200 lb",
+              "cost": 240,
+              "status": "On time",
+              "priority": "Standard"
+            },
+            {
+              "trackingNumber": "EXAMPLE-D201",
+              "customerName": "Pine Foods",
+              "origin": "South distribution center",
+              "destination": "Coastal South",
+              "carrier": "Regional carrier",
+              "weight": "2,100 lb",
+              "cost": 410,
+              "status": "Delayed",
+              "priority": "High"
+            },
+            {
+              "trackingNumber": "EXAMPLE-D301",
+              "customerName": "Metro Grocers",
+              "origin": "West cold storage",
+              "destination": "Mountain West",
+              "carrier": "Cold chain carrier",
+              "weight": "900 lb",
+              "cost": 380,
+              "status": "At risk",
+              "priority": "High"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 267
+      }
+    },
+    {
+      "id": "ai-warehouse-analysis",
+      "endpoint": "/api/ai/warehouse-analysis",
+      "title": "Warehouse analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "warehouse",
+          "type": "json",
+          "required": false,
+          "label": "Warehouse",
+          "presets": [
+            {
+              "name": "North distribution center",
+              "region": "Northeast",
+              "capacity": 10000,
+              "currentUtilization": 78,
+              "dockCount": 12,
+              "monthlyOperatingCost": 180000,
+              "temperatureControlled": false
+            },
+            {
+              "name": "South distribution center",
+              "region": "Southeast",
+              "capacity": 8000,
+              "currentUtilization": 92,
+              "dockCount": 8,
+              "monthlyOperatingCost": 145000,
+              "temperatureControlled": false
+            },
+            {
+              "name": "West cold storage",
+              "region": "West",
+              "capacity": 6000,
+              "currentUtilization": 68,
+              "dockCount": 6,
+              "monthlyOperatingCost": 220000,
+              "temperatureControlled": true
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 281
+      }
+    },
+    {
+      "id": "ai-promotion-analysis",
+      "endpoint": "/api/ai/promotion-analysis",
+      "title": "Promotion analysis",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "promotion",
+          "type": "json",
+          "required": false,
+          "label": "Promotion",
+          "presets": [
+            {
+              "name": "Autumn pantry offer",
+              "type": "Volume discount",
+              "product": "Canned tomatoes 24-pack",
+              "discountPercent": 8,
+              "targetSegment": "Independent grocery",
+              "territory": "North Metro",
+              "estimatedImpact": 65000,
+              "actualImpact": 59000,
+              "redemptions": 74
+            },
+            {
+              "name": "Beverage expansion",
+              "type": "Bundle",
+              "product": "Sparkling water 12-pack",
+              "discountPercent": 12,
+              "targetSegment": "Regional grocery",
+              "territory": "Coastal South",
+              "estimatedImpact": 82000,
+              "actualImpact": 91000,
+              "redemptions": 103
+            },
+            {
+              "name": "Frozen category recovery",
+              "type": "Limited offer",
+              "product": "Frozen vegetables case",
+              "discountPercent": 10,
+              "targetSegment": "Convenience chain",
+              "territory": "Mountain West",
+              "estimatedImpact": 42000,
+              "actualImpact": 31000,
+              "redemptions": 38
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 295
+      }
+    },
+    {
+      "id": "ai-customer-churn-prediction",
+      "endpoint": "/api/ai/customer-churn-prediction",
+      "title": "Customer churn prediction",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "customer",
+          "default": {},
+          "type": "json",
+          "required": false,
+          "label": "Customer",
+          "presets": [
+            {
+              "name": "Harbor Market",
+              "accountAge": 4,
+              "lastOrderDate": "2026-09-25",
+              "ordersLast90Days": 12,
+              "lifetimeValue": 285000,
+              "supportTickets": 1,
+              "paymentBehavior": "On time",
+              "territory": "North Metro",
+              "salesRep": "Assigned representative"
+            },
+            {
+              "name": "Pine Foods",
+              "accountAge": 6,
+              "lastOrderDate": "2026-09-17",
+              "ordersLast90Days": 5,
+              "lifetimeValue": 610000,
+              "supportTickets": 4,
+              "paymentBehavior": "Occasional delay",
+              "territory": "Coastal South",
+              "salesRep": "Assigned representative"
+            },
+            {
+              "name": "Metro Grocers",
+              "accountAge": 3,
+              "lastOrderDate": "2026-07-04",
+              "ordersLast90Days": 1,
+              "lifetimeValue": 190000,
+              "supportTickets": 6,
+              "paymentBehavior": "Late twice",
+              "territory": "Mountain West",
+              "salesRep": "Assigned representative"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 311
+      }
+    },
+    {
+      "id": "ai-contract-renewal-recommendation",
+      "endpoint": "/api/ai/contract-renewal-recommendation",
+      "title": "Contract renewal recommendation",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "contract",
+          "default": {},
+          "type": "json",
+          "required": false,
+          "label": "Contract",
+          "presets": [
+            {
+              "customerName": "Harbor Market",
+              "currentTerms": "Net 30, annual review",
+              "expirationDate": "2026-12-31",
+              "annualSpend": 185000,
+              "marginTrend": "Stable at 22%",
+              "paymentBehavior": "On time",
+              "competitorActivity": "No known bid",
+              "satisfactionSignal": "Positive quarterly review"
+            },
+            {
+              "customerName": "Pine Foods",
+              "currentTerms": "Net 45, annual review",
+              "expirationDate": "2027-01-31",
+              "annualSpend": 320000,
+              "marginTrend": "Down 3 points",
+              "paymentBehavior": "Occasional delay",
+              "competitorActivity": "Competitor quote reported",
+              "satisfactionSignal": "Delivery concerns"
+            },
+            {
+              "customerName": "Metro Grocers",
+              "currentTerms": "Net 30, annual review",
+              "expirationDate": "2027-02-28",
+              "annualSpend": 145000,
+              "marginTrend": "Down 5 points",
+              "paymentBehavior": "Late twice",
+              "competitorActivity": "Active tender",
+              "satisfactionSignal": "Escalated support case"
+            }
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 337
+      }
+    },
+    {
+      "id": "ai-supplier-diversification",
+      "endpoint": "/api/ai/supplier-diversification",
+      "title": "Supplier diversification",
+      "description": "Review native inputs and source evidence before generating. Examples are illustrative and require your review.",
+      "fields": [
+        {
+          "key": "supplierMix",
+          "default": [],
+          "type": "json",
+          "required": false,
+          "label": "Supplier Mix",
+          "presets": [
+            [
+              {
+                "supplier": "Regional Foods Co.",
+                "category": "Dry goods",
+                "spendSharePercent": 62,
+                "leadTimeDays": 7
+              },
+              {
+                "supplier": "Second Source Foods",
+                "category": "Dry goods",
+                "spendSharePercent": 38,
+                "leadTimeDays": 11
+              }
+            ],
+            [
+              {
+                "supplier": "Coastal Beverage Supply",
+                "category": "Beverages",
+                "spendSharePercent": 84,
+                "leadTimeDays": 12
+              },
+              {
+                "supplier": "Regional Drinks Co.",
+                "category": "Beverages",
+                "spendSharePercent": 16,
+                "leadTimeDays": 9
+              }
+            ],
+            [
+              {
+                "supplier": "Mountain Cold Chain",
+                "category": "Frozen foods",
+                "spendSharePercent": 100,
+                "leadTimeDays": 18
+              }
+            ]
+          ],
+          "manual": false
+        },
+        {
+          "key": "constraints",
+          "default": "",
+          "type": "text",
+          "required": false,
+          "label": "Constraints",
+          "presets": [
+            "Keep total landed cost within 5% of the current mix.",
+            "Preserve refrigerated transport and keep lead times under 14 days.",
+            "Qualify a second cold chain supplier before reallocating critical volume."
+          ],
+          "manual": false
+        },
+        {
+          "key": "goals",
+          "default": "",
+          "type": "text",
+          "required": false,
+          "label": "Goals",
+          "presets": [
+            "Reduce concentration risk while preserving service levels.",
+            "Improve on time delivery without increasing stockouts.",
+            "Develop a phased supplier transition with contingency stock."
+          ],
+          "manual": false
+        }
+      ],
+      "source": {
+        "file": "server/routes/ai.js",
+        "line": 362
+      }
+    }
+  ],
+  "resources": [
+    {
+      "key": "customers",
+      "endpoint": "/api/customers",
+      "label": "Customers",
+      "fields": [],
+      "updateFields": [],
+      "delete": true,
+      "source": "server/routes/customers.js"
+    },
+    {
+      "key": "inventory",
+      "endpoint": "/api/inventory",
+      "label": "Inventory",
+      "fields": [],
+      "updateFields": [],
+      "delete": true,
+      "source": "server/routes/inventory.js"
+    }
+  ]
+}
